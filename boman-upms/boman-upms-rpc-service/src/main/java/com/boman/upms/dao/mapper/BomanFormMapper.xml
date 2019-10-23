@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boman.upms.dao.mapper.BomanFormMapper">
+
+    <select id="selectByBomanFormForOffsetPage" parameterType="com.boman.upms.dao.model.BomanForm" resultType="com.boman.upms.dao.model.BomanForm">
+        select  id, name,tableName,createUser, createTime from boman_form
+        <if test="name != null and name != '' ">
+            where name like concat('%', #{name}, '%')
+        </if>
+        <if test="order != null and sort != null">
+            ORDER BY #{sort} #{order}
+        </if>
+        <if test="order == null and sort == null">
+            ORDER BY id desc
+        </if>
+    </select>
+
+    <select id="countByBomanForm" parameterType="com.boman.upms.dao.model.BomanForm" resultType="java.lang.Long">
+        select count(*) from boman_form
+        <if test="name != null and name != '' ">
+            where name like concat('%', #{name}, '%')
+        </if>
+    </select>
+    
+    <select id="executeSqlBatch" parameterType="String">
+        ${sql}
+    </select>
+    
+    <insert id="saveForm" parameterType="com.boman.upms.dao.model.BomanForm" useGeneratedKeys="true" keyProperty="id">
+        insert into boman_form
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="tip != null and tip != ''">tip,</if>
+            <if test="primaryTable != null and primaryTable != ''">primaryTable,</if>
+            <if test="tableName != null and tableName != ''">tableName,</if>
+            <if test="source != null and source != ''">source,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="createUser != null and createUser != ''">createUser,</if>
+            <if test="createTime != null and createTime != ''">createTime,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="tip != null and tip != ''">#{tip},</if>
+            <if test="primaryTable != null and primaryTable != ''">#{primaryTable},</if>
+            <if test="tableName != null and tableName != ''">#{tableName},</if>
+            <if test="source != null and source != ''">#{source},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="createUser != null and createUser != ''">#{createUser},</if>
+            <if test="createTime != null and createTime != ''">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <select id="selectByPrimaryKey" resultType="com.boman.upms.dao.model.BomanForm" parameterType="java.lang.Integer">
+        select * from boman_form where id = #{id}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from boman_form where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <update id="updateForm" parameterType="com.boman.upms.dao.model.BomanForm">
+        update boman_form
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="tip != null and tip != ''">tip = #{tip},</if>
+            <if test="primaryTable != null and primaryTable != ''">primaryTable = #{primaryTable},</if>
+            <if test="tableName != null and tableName != ''">tableName = #{tableName},</if>
+            <if test="source != null and source != ''">source = #{source},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="createUser != null and createUser != ''">createUser = #{createUser},</if>
+            <if test="createTime != null and createTime != ''">createTime = #{createTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

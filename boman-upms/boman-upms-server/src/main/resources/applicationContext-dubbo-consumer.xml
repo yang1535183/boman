@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+
+    <dubbo:application name="boman-upms-server"/>
+
+    <dubbo:registry file="./boman-upms-server-dubbo.cache" address="zookeeper://zkserver:2181"/>
+    <!-- 订阅服务 -->
+    <dubbo:consumer check="false"/>
+
+    <!-- 系统 -->
+    <dubbo:reference id="upmsSystemService" interface="com.boman.upms.rpc.api.UpmsSystemService" mock="true"/>
+    <!-- 组织 -->
+    <dubbo:reference id="upmsOrganizationService" interface="com.boman.upms.rpc.api.UpmsOrganizationService" mock="true"/>
+    <!-- 用户组织 -->
+    <dubbo:reference id="upmsUserOrganizationService" interface="com.boman.upms.rpc.api.UpmsUserOrganizationService" mock="true"/>
+    <!-- 用户 -->
+    <dubbo:reference id="upmsUserService" interface="com.boman.upms.rpc.api.UpmsUserService" mock="true"/>
+    <!-- 角色 -->
+    <dubbo:reference id="upmsRoleService" interface="com.boman.upms.rpc.api.UpmsRoleService" mock="true"/>
+    <!-- 权限 -->
+    <dubbo:reference id="upmsPermissionService" interface="com.boman.upms.rpc.api.UpmsPermissionService" mock="true"/>
+    <!-- 角色权限 -->
+    <dubbo:reference id="upmsRolePermissionService" interface="com.boman.upms.rpc.api.UpmsRolePermissionService" mock="true"/>
+    <!-- 用户权限 -->
+    <dubbo:reference id="upmsUserPermissionService" interface="com.boman.upms.rpc.api.UpmsUserPermissionService" mock="true"/>
+    <!-- 用户角色 -->
+    <dubbo:reference id="upmsUserRoleService" interface="com.boman.upms.rpc.api.UpmsUserRoleService" mock="true"/>
+    <!-- 操作日志 -->
+    <dubbo:reference id="upmsLogService" interface="com.boman.upms.rpc.api.UpmsLogService" mock="true"/>
+    <!-- 接口服务 -->
+    <dubbo:reference id="upmsApiService" interface="com.boman.upms.rpc.api.UpmsApiService" mock="true"/>
+    <!-- 通知接口 -->
+    <dubbo:reference id="messageTextService" interface="com.boman.upms.rpc.api.MessageTextService" mock="true"/>
+
+    <!--表单接口-->
+    <dubbo:reference id="bomanFormService" interface="com.boman.upms.rpc.api.BomanFormService" />
+
+    <!--工作流接口-->
+    <dubbo:reference id="activitiService" interface="com.boman.upms.rpc.api.ActivitiService" />
+
+    <!-- 餐卷管理 -->
+    <dubbo:reference id="mealRollService" interface="com.boman.upms.rpc.api.MealRollService" mock="true"/>
+</beans>

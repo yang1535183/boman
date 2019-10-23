@@ -1,0 +1,8 @@
+@charset "utf-8";
+
+.logo-default{
+	font-size: 22px!important;
+}
+.card-shadow {
+    box-shadow: none!important;
+}

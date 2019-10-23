@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boman.upms.dao.mapper.MessageTextMapper">
+
+	<resultMap id="BaseResultMap" type="com.boman.upms.dao.model.MessageText">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="type" jdbcType="VARCHAR" property="type" />
+		<result column="message" jdbcType="VARCHAR" property="message" />
+		<result column="tittle" jdbcType="VARCHAR" property="tittle" />
+		<result column="send_id" jdbcType="INTEGER" property="sendId" />
+		<result column="send_name" jdbcType="VARCHAR" property="sendName" />
+		<result column="group_ids" jdbcType="VARCHAR" property="groupIds" />
+		<result column="rect_name" jdbcType="VARCHAR" property="rectName" />
+		<result column="rect_id" jdbcType="INTEGER" property="rectId" />
+		<result column="status" jdbcType="VARCHAR" property="status" />
+		<result column="url_type" jdbcType="VARCHAR" property="urlType" />
+		<result column="ctime" jdbcType="BIGINT" property="ctime" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id,type,message,tittle,send_id,send_name,group_ids,rect_name,rect_id,status,ctime,urlType
+	</sql>
+	
+	<select id="selectByMessageForOffsetPage" parameterType="com.boman.upms.dao.model.MessageText" resultMap="BaseResultMap">
+		<!-- SELECT a.*,u.username as send_name from 
+			((SELECT  t.*,s.status from message_text t, message_state s where t.id=s.message_id)
+			UNION ALL
+			(SELECT  t.*, '0' as status from message_text t where (SELECT COUNT(1) as num from message_state s where t.id=s.message_id ) = 0 )  ) a , 
+			upms_user u where send_id=u.user_id and u.username=#{rectName} 
+			<if test="tittle != null and tittle != '' ">
+				and a.tittle LIKE CONCAT('%',#{tittle},'%')
+			</if>
+				ORDER BY a.id ASC -->
+				
+		SELECT t.*, s.status,'admin' as send_name from message_text t LEFT JOIN message_state s on t.id=s.message_id 
+			where (s.message_id=null and t.type='1') or (s.rect_name=#{rectName}) ORDER BY t.id desc
+	</select>
+	
+	<insert id="insert" parameterType="com.boman.upms.dao.model.MessageText">
+		<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      		SELECT LAST_INSERT_ID()
+    	</selectKey>
+    	insert into message_text (message,tittle,ctime) values
+    	(#{message,jdbcType=VARCHAR}, #{tittle,jdbcType=VARCHAR}, #{ctime,jdbcType=BIGINT})
+	</insert>
+	
+	<select id="getMessageNum" resultType="int">
+		SELECT COUNT(*) from message_text t , message_state s 
+			where t.id = s.message_id AND s.status = '0' and s.rect_name = #{username}
+	</select>
+	
+	<select id="selectByLoginName" resultMap="BaseResultMap">
+		SELECT t.id,t.type,t.tittle,t.url_type,t.ctime from message_text t LEFT JOIN message_state s on t.id=s.message_id 
+			where (s.message_id=null and t.type='1') or (s.status = '0' AND s.rect_name=#{username})
+	</select>
+	
+	<select id="countByExample" resultType="int">
+		SELECT COUNT(1) from message_text t LEFT JOIN message_state s on t.id=s.message_id 
+			where (s.message_id=null and t.type='1') or (s.status = '0' AND s.rect_name=#{username})
+	</select>
+	
+	<select id="selectById" resultMap="BaseResultMap">
+		update message_state set status = '1' where message_id = #{id};
+		SELECT t.ctime,t.message,t.tittle,s.status
+			FROM message_text t LEFT JOIN message_state s on t.id = s.message_id where t.id=#{id};
+	</select>
+</mapper>
