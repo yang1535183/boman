@@ -1,5 +1,6 @@
 package com.boman.upms.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
@@ -21,16 +22,18 @@ public class MealRoll implements Serializable {
     private String faceValue;		// 面值
     private String coopBusiness;		// 合作商家
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date sDate;		// 有效时间起
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date startDate;		// 有效时间起
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date eDate;		// 有效时间止
-    private Date cDate;		// 领取时间
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date endDate;		// 有效时间止
+    private Date receiveDate;		// 领取时间
     private String receive;		// 是否领取
     private UpmsUser receiver;		// 领取人
     private Date beginCreateDate;		// 开始 创建时间
     private Date endCreateDate;		// 结束 创建时间
-    private Date beginCDate;		// 开始 领取时间
-    private Date endCDate;		// 结束 领取时间
+    private Date beginReceiveDate;		// 开始 领取时间
+    private Date endReceiveDate;		// 结束 领取时间
     private String sort;
     private String order;
 
@@ -113,28 +116,28 @@ public class MealRoll implements Serializable {
         this.coopBusiness = coopBusiness;
     }
 
-    public Date getsDate() {
-        return sDate;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setsDate(Date sDate) {
-        this.sDate = sDate;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date geteDate() {
-        return eDate;
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public void seteDate(Date eDate) {
-        this.eDate = eDate;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    public Date getcDate() {
-        return cDate;
+    public Date getReceiveDate() {
+        return receiveDate;
     }
 
-    public void setcDate(Date cDate) {
-        this.cDate = cDate;
+    public void setReceiveDate(Date receiveDate) {
+        this.receiveDate = receiveDate;
     }
 
     public String getReceive() {
@@ -169,20 +172,20 @@ public class MealRoll implements Serializable {
         this.endCreateDate = endCreateDate;
     }
 
-    public Date getBeginCDate() {
-        return beginCDate;
+    public Date getBeginReceiveDate() {
+        return beginReceiveDate;
     }
 
-    public void setBeginCDate(Date beginCDate) {
-        this.beginCDate = beginCDate;
+    public void setBeginReceiveDate(Date beginReceiveDate) {
+        this.beginReceiveDate = beginReceiveDate;
     }
 
-    public Date getEndCDate() {
-        return endCDate;
+    public Date getEndReceiveDate() {
+        return endReceiveDate;
     }
 
-    public void setEndCDate(Date endCDate) {
-        this.endCDate = endCDate;
+    public void setEndReceiveDate(Date endReceiveDate) {
+        this.endReceiveDate = endReceiveDate;
     }
 
     public String getSort() {

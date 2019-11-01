@@ -3,29 +3,30 @@
 <mapper namespace="com.boman.upms.dao.mapper.MealRollMapper">
   <sql id="mealRollColumns">
 		a.id AS "id",
-		u1.user_id AS "createBy.userId",
-		u1.username AS "createBy.username",
+		u2.user_id AS "createBy.userId",
+		u2.username AS "createBy.username",
 		a.create_date AS "createDate",
-		u2.user_id AS "update_by.userId",
-		u2.username AS "update_by.username",
+		u4.user_id AS "updateBy.userId",
+		u4.username AS "updateBy.username",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
 		a.face_value AS "faceValue",
-		a.coop_business AS "coopBusiness",
-		a.s_date AS "sDate",
-		a.e_date AS "eDate",
-		a.c_date AS "cDate",
+		a.coop_Business AS "coopBusiness",
+		a.start_date AS "startDate",
+		a.end_date AS "endDate",
 		a.receive AS "receive",
-		u3.user_id AS "receiver.userId",
-		u3.username AS "receiver.username"
+		u13.user_id AS "receiver.userId",
+		u13.username AS "receiver.username",
+		a.receive_date AS "receiveDate",
+		a.special AS "special"
 	</sql>
 
   <sql id="mealRollJoins">
-      left join upms_user u1 on a.create_by = u1.user_id
-      left join upms_user u2 on a.update_by = u2.user_id
-      left join upms_user u3 on a.receiver = u3.user_id
-  </sql>
+		LEFT JOIN upms_user u2 ON u2.user_id = a.create_by
+		LEFT JOIN upms_user u4 ON u4.user_id = a.update_by
+		LEFT JOIN upms_user u13 ON u13.user_id = a.receiver
+	</sql>
 
   <select id="get" resultType="com.boman.upms.dao.model.MealRoll">
     SELECT
@@ -54,14 +55,14 @@
       <if test="faceValue != null and faceValue != ''">
         AND a.face_value = #{faceValue}
       </if>
-      <if test="sDate != null and sDate != ''">
-        AND a.s_date = #{sDate}
+      <if test="startDate != null and startDate != ''">
+        AND a.start_date = #{startDate}
       </if>
-      <if test="eDate != null and eDate != ''">
-        AND a.e_date = #{eDate}
+      <if test="endDate != null and endDate != ''">
+        AND a.end_date = #{endDate}
       </if>
-      <if test="beginCDate != null and endCDate != null and beginCDate != '' and endCDate != ''">
-        AND a.c_date BETWEEN #{beginCDate} AND #{endCDate}
+      <if test="beginReceiveDate != null and endReceiveDate != null and beginReceiveDate != '' and endReceiveDate != ''">
+        AND a.receive_date BETWEEN #{beginReceiveDate} AND #{endReceiveDate}
       </if>
       <if test="receive != null and receive != ''">
         AND a.receive = #{receive}
@@ -102,9 +103,9 @@
 			remarks = #{remarks},
 			face_value = #{faceValue},
 			coop_business = #{coopBusiness},
-			s_date = #{sDate},
-			e_date = #{eDate},
-			c_date = #{cDate},
+			start_date = #{startDate},
+			end_date = #{endDate},
+			receive_date = #{receiveDate},
 			receive = #{receive},
 			receiver = #{receiver.userId}
 		WHERE id = #{id}
@@ -150,9 +151,9 @@
           del_flag,
           face_value,
           coop_business,
-          s_date,
-          e_date,
-          c_date,
+          start_date,
+          end_date,
+          receive_date,
           receive,
           receiver
           ) VALUES (
@@ -164,9 +165,9 @@
           #{delFlag},
           #{faceValue},
           #{coopBusiness},
-          #{sDate},
-          #{eDate},
-          #{cDate},
+          #{startDate},
+          #{endDate},
+          #{receiveDate},
           #{receive},
           #{receiver.userId}
           )
@@ -192,12 +193,6 @@
       <if test="delFlag != null">
         del_flag,
       </if>
-      <if test="userBy != null">
-        user_by,
-      </if>
-      <if test="userDate != null">
-        user_date,
-      </if>
       <if test="faceValue != null">
         face_value,
       </if>
@@ -217,12 +212,6 @@
       </if>
       <if test="delFlag != null">
         #{delFlag,jdbcType=CHAR},
-      </if>
-      <if test="userBy != null">
-        #{userBy,jdbcType=VARCHAR},
-      </if>
-      <if test="userDate != null">
-        #{userDate,jdbcType=TIMESTAMP},
       </if>
       <if test="faceValue != null">
         #{faceValue,jdbcType=VARCHAR},
@@ -252,12 +241,6 @@
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
       </if>
-      <if test="userBy != null">
-        user_by = #{userBy,jdbcType=VARCHAR},
-      </if>
-      <if test="userDate != null">
-        user_date = #{userDate,jdbcType=TIMESTAMP},
-      </if>
       <if test="faceValue != null">
         face_value = #{faceValue,jdbcType=VARCHAR},
       </if>
@@ -282,9 +265,9 @@
     remarks = #{remarks},
     face_value = #{faceValue},
     coop_business = #{coopBusiness},
-    s_date = #{sDate},
-    e_date = #{eDate},
-    c_date = #{cDate},
+    start_date = #{startDate},
+    end_date = #{endDate},
+    receive_date = #{receiveDate},
     receive = #{receive},
     receiver = #{receiver.userId}
     WHERE id = #{id}

@@ -19,18 +19,17 @@
 			<input id="coopBusiness" type="text" class="form-control" name="coopBusiness" maxlength="32"  value="${mealRoll.coopBusiness}">
 		</div>
 		<div class="form-group">
-			<label for="sDate">有效时间起</label>
-			<input id="sDate" type="date" class="form-control" name="sDate" maxlength="20" value="<fmt:formatDate value="${mealRoll.sDate}" pattern="yyyy-MM-dd" />">
-		</div>
-		<div class="form-group">
-			<label for="eDate">有效时间止</label>
-			<input id="eDate" type="date" class="form-control" name="eDate" maxlength="150" value="<fmt:formatDate value="${mealRoll.eDate}" pattern="yyyy-MM-dd" />">
-		</div>
-		<div class="form-group">
 			<label for="receiver.username">领取人</label>
 			<input id="receiver.username" type="text" class="form-control" name="receiver.username" maxlength="32"  value="${mealRoll.receiver.username}">
 			<input id="receiver.userId" type="hidden" name="receiver.userId" maxlength="32"  value="${mealRoll.receiver.userId}">
 
+		</div>
+		<div class="form-group">
+			<input id="startDate" type="date" class="form-control" name="startDate" maxlength="20" value="${mealRoll.startDate}">
+		</div>
+		<div class="form-group">
+			<label for="endDate">有效时间止</label>
+			<input id="endDate" type="date" class="form-control" name="endDate" maxlength="150" value="<fmt:formatDate value="${mealRoll.endDate}" pattern="yyyy-MM-dd" />">
 		</div>
 		<div class="form-group text-right dialog-buttons">
 			<c:choose>

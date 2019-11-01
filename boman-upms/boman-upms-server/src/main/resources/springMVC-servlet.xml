@@ -7,6 +7,19 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <mvc:annotation-driven conversion-service="conversionService" />
+    <!-- 配置统一日期格式转换器（前端传入-后台接收处理） -->
+    <bean id="conversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.boman.upms.server.DataConvert">
+                    <property name="datePattern" value="yyyy-MM-dd HH:mm:ss" />
+                </bean>
+            </set>
+        </property>
+    </bean>
+
     <!-- 根目录'/'对应页面 -->
     <mvc:view-controller path="/" view-name="/index.jsp"/>
 

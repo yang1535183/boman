@@ -167,4 +167,10 @@ public class MealRollController {
         Long count = mealRollService.saveForm(mealRoll);
         return new UpmsResult(UpmsResultConstant.SUCCESS, count);
     }
+
+    @RequestMapping(value = "getMealRollById")
+    @ResponseBody
+    public MealRoll getMealRollById(String id){
+        return mealRollService.selectByPrimaryKey(id);
+    }
 }
