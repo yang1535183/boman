@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * UpmsUserService实现
@@ -86,5 +87,10 @@ public class UpmsUserServiceImpl extends BaseServiceImpl<UpmsUserMapper, UpmsUse
     @Override
     public Integer selectByRoleCount(String roleId) {
         return upmsUserMapper.selectByRoleCount(roleId);
+    }
+
+    @Override
+    public List<Map<Object,Object>> userOrg(UpmsUser upmsUser) {
+        return upmsUserMapper.userOrg(upmsUser);
     }
 }

@@ -340,5 +340,16 @@
     where username = #{loginName,jdbcType=VARCHAR}
   </select>
 
+  <select id="userOrg" parameterType="com.boman.upms.dao.model.UpmsUser" resultType="java.util.Map">
+    select u.user_id as id , 0 as pid ,u.realname as username from upms_user u
+      where u.user_id in (
+        select DISTINCT(uuo.user_id) from upms_user_organization uuo
+        where uuo.organization_id in (
+          select a.organization_id from upms_user_organization a
+            where a.user_id = #{userId}
+        )
+      )
+  </select>
+
   <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
 </mapper>

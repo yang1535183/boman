@@ -5,9 +5,11 @@
 		a.id AS "id",
 		u2.user_id AS "createBy.userId",
 		u2.username AS "createBy.username",
+		u2.realname AS "createBy.realname",
 		a.create_date AS "createDate",
 		u4.user_id AS "updateBy.userId",
 		u4.username AS "updateBy.username",
+		u4.realname AS "updateBy.realname",
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
@@ -18,6 +20,7 @@
 		a.receive AS "receive",
 		u13.user_id AS "receiver.userId",
 		u13.username AS "receiver.username",
+		u13.realname AS "receiver.realname",
 		a.receive_date AS "receiveDate",
 		a.special AS "special"
 	</sql>
@@ -155,7 +158,8 @@
           end_date,
           receive_date,
           receive,
-          receiver
+          receiver,
+          special
           ) VALUES (
           #{createBy.userId},
           #{createDate},
@@ -169,7 +173,8 @@
           #{endDate},
           #{receiveDate},
           #{receive},
-          #{receiver.userId}
+          #{receiver.userId},
+          #{special}
           )
 
   </insert>
@@ -219,9 +224,6 @@
       <if test="coopBusiness != null">
         #{coopBusiness,jdbcType=VARCHAR},
       </if>
-      <if test="isUse != null">
-        #{isUse,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.boman.upms.dao.model.MealRoll">
@@ -232,11 +234,29 @@
     -->
     update meal_roll
     <set>
-      <if test="createBy != null">
-        create_by = #{createBy,jdbcType=VARCHAR},
+      <if test="updateBy != null and updateBy.userId != null and updateBy.userId != ''">
+        update_by = #{updateBy.userId},
       </if>
-      <if test="createDate != null">
-        create_date = #{createDate,jdbcType=TIMESTAMP},
+      <if test="updateDate != null and updateDate != ''">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remarks != null and remarks != ''">
+        remarks = #{remarks},
+      </if>
+      <if test="startDate != null and startDate != ''">
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null and endDate != ''">
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receiveDate != null and receiveDate != ''">
+        receive_date = #{receiveDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="receive != null and receive != ''">
+        receive = #{receive},
+      </if>
+      <if test="receiver != null and receiver.userId != null and receiver.userId != ''">
+        receiver = #{receiver.userId}
       </if>
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
@@ -246,9 +266,6 @@
       </if>
       <if test="coopBusiness != null">
         coop_business = #{coopBusiness,jdbcType=VARCHAR},
-      </if>
-      <if test="isUse != null">
-        is_use = #{isUse,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -279,9 +296,15 @@
     from meal_roll a
     <include refid="mealRollJoins"/>
 
+    <where>
     <if test="faceValue != null and faceValue != '' ">
-      where a.face_value like concat('%', #{faceValue}, '%')
+     AND a.face_value like concat('%', #{faceValue}, '%')
     </if>
+
+    <if test="createBy != null and createBy.userId != null and createBy.userId != ''">
+      AND a.create_by = #{createBy.userId}
+    </if>
+    </where>
     <if test="order != null and sort != null">
       ORDER BY #{sort} #{order}
     </if>
