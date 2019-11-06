@@ -6,6 +6,7 @@ import com.boman.upms.dao.model.UpmsUser;
 import com.boman.upms.dao.model.UpmsUserExample;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * 降级实现UpmsUserService接口
@@ -41,5 +42,10 @@ public class UpmsUserServiceMock extends BaseServiceMock<UpmsUserMapper, UpmsUse
     @Override
     public Integer selectByRoleCount(String roleId) {
         return 0;
+    }
+
+    @Override
+    public List<Map<Object,Object>> userOrg(UpmsUser upmsUser) {
+        return null;
     }
 }

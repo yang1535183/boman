@@ -5,6 +5,7 @@ import com.boman.upms.dao.model.UpmsUser;
 import com.boman.upms.dao.model.UpmsUserExample;
 
 import java.util.List;
+import java.util.Map;
 
 /**
 * UpmsUserService接口
@@ -39,4 +40,6 @@ public interface UpmsUserService extends BaseService<UpmsUser, UpmsUserExample> 
     public List<UpmsUser> selectByRoleForOffsetPage(String roleId, int offset, int limit);
 
     public Integer selectByRoleCount(String roleId);
+
+    public List<Map<Object,Object>> userOrg(UpmsUser upmsUser);
 }
