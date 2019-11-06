@@ -23,7 +23,7 @@ var setting = {
 	check: {
 		enable: true,
 		// 勾选关联父，取消关联子
-		chkboxType: { "Y" : "p", "N" : "s" }
+		chkboxType: {  "Y" : "ps", "N" : "ps"  }
 	},
 	async: {
 		enable: true,

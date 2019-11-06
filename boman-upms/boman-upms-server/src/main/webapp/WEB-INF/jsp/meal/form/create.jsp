@@ -19,17 +19,23 @@
 			<input id="coopBusiness" type="text" class="form-control" name="coopBusiness" maxlength="32"  value="${mealRoll.coopBusiness}">
 		</div>
 		<div class="form-group">
-			<label for="receiver.username">领取人</label>
-			<input id="receiver.username" type="text" class="form-control" name="receiver.username" maxlength="32"  value="${mealRoll.receiver.username}">
-			<input id="receiver.userId" type="hidden" name="receiver.userId" maxlength="32"  value="${mealRoll.receiver.userId}">
+			<label for="receiverUserNames">领取人</label>
+			<input id="receiverUserNames" type="text" class="form-control" name="receiverUserNames" maxlength="32"  value="${mealRoll.receiver.realname}"
+					onclick="chooseUser()">
+			<input id="receiverUserIds" type="hidden" name="receiverUserIds" maxlength="32"  value="${mealRoll.receiver.userId}">
 
 		</div>
 		<div class="form-group">
-			<input id="startDate" type="date" class="form-control" name="startDate" maxlength="20" value="${mealRoll.startDate}">
+			<span>有效时间起</span>
+			<input id="startDate" type="date" class="form-control" name="startDate" maxlength="20" value="<fmt:formatDate value="${mealRoll.startDate}" pattern="yyyy-MM-dd" />">
 		</div>
 		<div class="form-group">
-			<label for="endDate">有效时间止</label>
+			<span>有效时间止</span>
 			<input id="endDate" type="date" class="form-control" name="endDate" maxlength="150" value="<fmt:formatDate value="${mealRoll.endDate}" pattern="yyyy-MM-dd" />">
+		</div>
+		<div class="form-group">
+			<label for="remarks">备注</label>
+			<input id="remarks" type="text" class="form-control" name="remarks" maxlength="32"  value="${mealRoll.remarks}">
 		</div>
 		<div class="form-group text-right dialog-buttons">
 			<c:choose>
@@ -43,7 +49,19 @@
 		</div>
 	</form>
 </div>
-<script>
+<script type="text/javascript">
+	// 选择用户
+	function chooseUser() {
+        window.open("${basePath}/meal/mealRoll/chooseUser","","width=200,height=300,top=100");
+    }
+
+    // 用户回显
+    function checkUser(userIds,userNames) {
+        $("#receiverUserIds").val(userIds);
+	    $("#receiverUserNames").val(userNames);
+	    console.log("userIds==="+userIds);
+	    console.log("userNames==="+userNames);
+    }
 function initUploader() {
 	//百度上传按钮
 	var uploader = WebUploader.create({
@@ -126,6 +144,11 @@ function createSubmit() {
         beforeSend: function() {
             if ($('#faceValue').val() == '') {
                 $('#faceValue').focus();
+                return false;
+            }
+
+            if ($('#receiverUserNames').val() == '') {
+                $('#receiverUserNames').focus();
                 return false;
             }
         },
