@@ -30,6 +30,9 @@ public class MealRoll implements Serializable {
     private Date receiveDate;		// 领取时间
     private String receive;		// 是否领取
     private UpmsUser receiver;		// 领取人
+    private String receiverUserIds;     // 领取人id
+    private String receiverUserNames; // 领取人姓名
+    private String special;        // 是否专用卷
     private Date beginCreateDate;		// 开始 创建时间
     private Date endCreateDate;		// 结束 创建时间
     private Date beginReceiveDate;		// 开始 领取时间
@@ -38,10 +41,6 @@ public class MealRoll implements Serializable {
     private String order;
 
     public MealRoll() {
-    }
-
-    public MealRoll(Integer id) {
-        this.id = id;
     }
 
     public Integer getId() {
@@ -154,6 +153,30 @@ public class MealRoll implements Serializable {
 
     public void setReceiver(UpmsUser receiver) {
         this.receiver = receiver;
+    }
+
+    public String getReceiverUserIds() {
+        return receiverUserIds;
+    }
+
+    public void setReceiverUserIds(String receiverUserIds) {
+        this.receiverUserIds = receiverUserIds;
+    }
+
+    public String getReceiverUserNames() {
+        return receiverUserNames;
+    }
+
+    public void setReceiverUserNames(String receiverUserNames) {
+        this.receiverUserNames = receiverUserNames;
+    }
+
+    public String getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(String special) {
+        this.special = special;
     }
 
     public Date getBeginCreateDate() {

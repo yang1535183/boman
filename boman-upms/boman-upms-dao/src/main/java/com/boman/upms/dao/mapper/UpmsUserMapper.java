@@ -3,6 +3,8 @@ package com.boman.upms.dao.mapper;
 import com.boman.upms.dao.model.UpmsUser;
 import com.boman.upms.dao.model.UpmsUserExample;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UpmsUserMapper {
@@ -62,4 +64,6 @@ public interface UpmsUserMapper {
      * @param roleId
      */
     public Integer selectByRoleCount(String roleId);
+
+    public List<Map<Object,Object>> userOrg(UpmsUser upmsUser);
 }
