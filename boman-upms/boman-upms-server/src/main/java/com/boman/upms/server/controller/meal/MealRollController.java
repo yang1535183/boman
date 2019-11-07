@@ -97,7 +97,7 @@ public class MealRollController {
     public String create(String id, String opt, ModelMap modelMap) {
         MealRoll mealRoll = mealRollService.selectByPrimaryKey(id);
         modelMap.put("mealRoll", mealRoll);
-        modelMap.put("opt", opt);
+        modelMap.put("opt", opt); // 页面标识
         return "/meal/form/create.jsp";
     }
 
@@ -124,10 +124,13 @@ public class MealRollController {
         System.out.printf(mealRoll.toString());
 
         if (mealRoll.getId() != null && mealRoll.getId().toString() != "") {
+            // 更新
+            mealRoll.setUpdateDate(new Date());
+            mealRoll.setUpdateBy(upmsUser);
             mealRollService.saveForm(mealRoll);
             LOGGER.info("修改餐卷，主键：id={}", mealRoll.getId());
         } else {
-
+            // 新增
             //增加默认字段
             mealRoll.setCreateBy(upmsUser); // 创建者
             mealRoll.setCreateDate(new Date()); //创建时间
@@ -137,15 +140,17 @@ public class MealRollController {
             mealRoll.setReceive("0");//是否领用（0:未领用 1:已领用）
             mealRoll.setSpecial("0"); // 是否专用卷（0:否 1:是）
             String receiverUserIds[] = mealRoll.getReceiverUserIds().split(",");
-            for (int i=0;i<receiverUserIds.length;i++) {
-                UpmsUser user = new UpmsUser();
-                user.setUserId(Integer.parseInt(receiverUserIds[i]));
-                mealRoll.setReceiver(user);
-                mealRoll = mealRollService.createMealRoll(mealRoll);
-                if (null == mealRoll) {
-                    return new UpmsResult(UpmsResultConstant.FAILED, "操作失败！");
+            for (int i = 0; i < receiverUserIds.length; i++) {
+                if (receiverUserIds[i] != null && !"".equals(receiverUserIds[i])){
+                    UpmsUser user = new UpmsUser();
+                    user.setUserId(Integer.parseInt(receiverUserIds[i]));
+                    mealRoll.setReceiver(user);
+                    mealRoll = mealRollService.createMealRoll(mealRoll);
+                    if (null == mealRoll) {
+                        return new UpmsResult(UpmsResultConstant.FAILED, "操作失败！");
+                    }
+                    LOGGER.info("新增餐卷，主键：id={}", mealRoll.getId());
                 }
-                LOGGER.info("新增餐卷，主键：id={}", mealRoll.getId());
             }
         }
         return new UpmsResult(UpmsResultConstant.SUCCESS, 1);
@@ -187,6 +192,12 @@ public class MealRollController {
         return new UpmsResult(UpmsResultConstant.SUCCESS, count);
     }
 
+    /**
+     * 通过餐卷id 获取 餐卷信息
+     *
+     * @param id
+     * @return MealRoll
+     */
     @RequestMapping(value = "getMealRollById")
     @ResponseBody
     public MealRoll getMealRollById(String id) {
@@ -195,7 +206,8 @@ public class MealRollController {
 
     @ApiOperation(value = "用户选择")
     @RequestMapping(value = "chooseUser")
-    public String chooseUser(HttpServletRequest request) {
+    public String chooseUser(HttpServletRequest request, String receiverUserIds) {
+        request.setAttribute("receiverUserIds",receiverUserIds);
         return "/meal/form/chooseUser.jsp";
     }
 
@@ -206,14 +218,91 @@ public class MealRollController {
         String loginName = ShiroUtils.getLoginName();
         UpmsUser loginUser = upmsUserService.getUserByLoginName(loginName);
         Map<String, Object> map = new HashMap<String, Object>();
-        List<Map<Object,Object>> userMap = upmsUserService.userOrg(loginUser);
+        List<Map<Object, Object>> userMap = upmsUserService.userOrg(loginUser);
         // 默认根节点
-        Map<Object,Object> map2 = new HashMap<Object, Object>();
-        map2.put("id","0");
-        map2.put("pid","-1");
-        map2.put("username","用户");
+        Map<Object, Object> map2 = new HashMap<Object, Object>();
+        map2.put("id", "0");
+        map2.put("pid", "-1");
+        map2.put("username", "用户");
         userMap.add(map2);
         map.put("userlist", userMap);
+        return map;
+    }
+
+    /**
+     * 餐卷领取
+     *
+     * @return
+     */
+    @RequestMapping(value = "mealRollList")
+    public String mealRollList() {
+        return "/meal/form/mealRollList.jsp";
+    }
+
+    /**
+     * 餐卷领取数据
+     *
+     * @param offset
+     * @param limit
+     * @param faceValue
+     * @param sort
+     * @param order
+     * @return
+     */
+    @RequestMapping(value = "mealRollListData")
+    @ResponseBody
+    public Object mealRollListData(@RequestParam(required = false, defaultValue = "0", value = "offset") int offset,
+                                   @RequestParam(required = false, defaultValue = "10", value = "limit") int limit,
+                                   @RequestParam(required = false, defaultValue = "", value = "search") String faceValue,
+                                   @RequestParam(required = false, value = "sort") String sort,
+                                   @RequestParam(required = false, value = "order") String order) {
+        MealRoll mealRoll = new MealRoll();
+        mealRoll.setFaceValue(faceValue);
+        mealRoll.setOrder(order);
+        mealRoll.setSort(sort);
+
+        // 当前用户
+        String loginName = ShiroUtils.getLoginName();
+        UpmsUser upmsUser = upmsUserService.getUserByLoginName(loginName);
+        mealRoll.setReceiver(upmsUser);
+
+        List<MealRoll> rows = mealRollService.selectByMealRollForOffsetPage(mealRoll, offset, limit);
+        long total = mealRollService.countByMealRoll(mealRoll);
+        Map<String, Object> result = new HashMap<>();
+        result.put("rows", rows);
+        result.put("total", total);
+        return result;
+    }
+
+    /**
+     * 领取餐卷
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "receiveMealRoll")
+    @ResponseBody
+    public Map<Object, Object> receiveMealRoll(String id) {
+        Map<Object, Object> map = new HashMap<Object, Object>();
+
+        // 当前用户
+        String loginName = ShiroUtils.getLoginName();
+        UpmsUser upmsUser = upmsUserService.getUserByLoginName(loginName);
+
+        MealRoll mealRoll = mealRollService.selectByPrimaryKey(id);
+        if (mealRoll != null) {
+            if ("1".equals(mealRoll.getReceive())) {
+                map.put("msg", "餐卷已领取，请勿重复操作");
+            } else {
+                mealRoll.setReceiver(upmsUser);
+                mealRoll.setReceiveDate(new Date());
+                mealRoll.setReceive("1");
+                mealRollService.saveForm(mealRoll);
+                map.put("msg", "领取成功");
+            }
+        } else {
+            map.put("msg", "领取失败");
+        }
         return map;
     }
 }

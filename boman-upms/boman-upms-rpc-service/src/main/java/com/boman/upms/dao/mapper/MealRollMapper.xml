@@ -237,26 +237,26 @@
       <if test="updateBy != null and updateBy.userId != null and updateBy.userId != ''">
         update_by = #{updateBy.userId},
       </if>
-      <if test="updateDate != null and updateDate != ''">
+      <if test="updateDate != null ">
         update_date = #{updateDate,jdbcType=TIMESTAMP},
       </if>
       <if test="remarks != null and remarks != ''">
         remarks = #{remarks},
       </if>
-      <if test="startDate != null and startDate != ''">
+      <if test="startDate != null ">
         start_date = #{startDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endDate != null and endDate != ''">
+      <if test="endDate != null ">
         end_date = #{endDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="receiveDate != null and receiveDate != ''">
+      <if test="receiveDate != null ">
         receive_date = #{receiveDate,jdbcType=TIMESTAMP},
       </if>
       <if test="receive != null and receive != ''">
         receive = #{receive},
       </if>
       <if test="receiver != null and receiver.userId != null and receiver.userId != ''">
-        receiver = #{receiver.userId}
+        receiver = #{receiver.userId},
       </if>
       <if test="delFlag != null">
         del_flag = #{delFlag,jdbcType=CHAR},
@@ -303,6 +303,10 @@
 
     <if test="createBy != null and createBy.userId != null and createBy.userId != ''">
       AND a.create_by = #{createBy.userId}
+    </if>
+    <if test="receiver != null and receiver.userId != null and receiver.userId != ''">
+      AND a.receiver = #{receiver.userId}
+      AND a.end_date >= SYSDATE()
     </if>
     </where>
     <if test="order != null and sort != null">

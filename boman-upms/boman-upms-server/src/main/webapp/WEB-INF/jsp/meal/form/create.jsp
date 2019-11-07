@@ -52,7 +52,8 @@
 <script type="text/javascript">
 	// 选择用户
 	function chooseUser() {
-        window.open("${basePath}/meal/mealRoll/chooseUser","","width=200,height=300,top=100");
+	    var receiverUserIds = $("#receiverUserIds").val();
+        window.open("${basePath}/meal/mealRoll/chooseUser?receiverUserIds="+receiverUserIds,"","width=200,height=300,top=100");
     }
 
     // 用户回显

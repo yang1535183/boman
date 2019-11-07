@@ -101,7 +101,7 @@
                     }
                 },
                 {field: 'receiver.realname', title: '领用人'},
-                {field: 'userDate', title: '领用时间',
+                {field: 'receiveDate', title: '领用时间',
                     //获取日期列的值进行转换
                     formatter: function (value, row, index) {
                         return changeDateFormat(value)

@@ -30,7 +30,7 @@
             userIds += changeNodes[i].id+",";
             userNames += changeNodes[i].username+",";
         }
-        if(userIds.length > 0){
+        if(userIds.length > 0 && userIds.substring(0,1) == 0){
             userIds = userIds.substring(2,userIds.length-1);
             userNames = userNames.substring(3,userNames.length-1);
         }
@@ -63,6 +63,12 @@
             async:true,
             success:function(res){
                 zTreeObj = $.fn.zTree.init($("#ztree"), settingss, res.userlist); //初始化树
+                // 默认选择节点
+                var ids = "${receiverUserIds}".split(",");
+                for(var i=0; i<ids.length; i++) {
+                    var node = zTreeObj.getNodeByParam("id", ids[i]);
+                    try{zTreeObj.checkNode(node, true, false);}catch(e){}
+                }
                 zTreeObj.expandAll(true);   //true 节点全部展开、false节点收缩
             }
         });
