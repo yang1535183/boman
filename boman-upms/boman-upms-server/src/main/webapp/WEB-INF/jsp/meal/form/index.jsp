@@ -93,7 +93,7 @@
             columns: [
                 {field: 'ck', checkbox: true},
                 {field: 'id', title: '编号', sortable: true, align: 'center'},
-                {field: 'createBy.username', title: '创建人'},
+                {field: 'createBy.realname', title: '创建人'},
                 {field: 'createDate', title: '创建时间',
                     //获取日期列的值进行转换
                     formatter: function (value, row, index) {
@@ -200,6 +200,8 @@
                                 type: 'get',
                                 url: '${basePath}/meal/mealRoll/delete/' + fid,
                                 success: function(result) {
+                                    console.log("=========");
+                                    console.log(result);
                                     if (result.code != 1) {
                                         if (result.data instanceof Array) {
                                             $.each(result.data, function(index, value) {

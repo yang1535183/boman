@@ -64,7 +64,7 @@
             columns: [
                 {field: 'ck', checkbox: true},
                 {field: 'id', title: '编号', sortable: true, align: 'center'},
-                {field: 'createBy.username', title: '创建人'},
+                {field: 'createBy.realname', title: '创建人'},
                 {field: 'createDate', title: '创建时间',
                     //获取日期列的值进行转换
                     formatter: function (value, row, index) {

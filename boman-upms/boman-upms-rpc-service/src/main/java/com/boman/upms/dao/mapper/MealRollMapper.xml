@@ -323,4 +323,18 @@
       where face_value like concat('%', #{faceValue}, '%')
     </if>
   </select>
+
+  <select id="getByUserForMealRoll" resultType="com.boman.upms.dao.model.MealRoll">
+    SELECT
+    <include refid="mealRollColumns"/>
+    FROM meal_roll a
+    <include refid="mealRollJoins"/>
+    <where>
+      <if test="userId != null">
+        AND a.receiver = #{userId}
+        AND a.receive = 1
+        AND a.end_date >= SYSDATE()
+      </if>
+    </where>
+  </select>
 </mapper>
