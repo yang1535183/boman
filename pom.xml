@@ -23,6 +23,7 @@
         <module>boman-admin</module>
         <module>boman-common</module>
         <module>boman-upms</module>
+        <module>boman-cj</module>
     </modules>
 
 

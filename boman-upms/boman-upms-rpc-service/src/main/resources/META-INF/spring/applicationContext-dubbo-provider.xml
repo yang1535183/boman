@@ -68,7 +68,4 @@
     <bean id="activitiService" class="com.boman.upms.rpc.service.impl.ActivitiServiceImpl"/>
     <dubbo:service interface="com.boman.upms.rpc.api.ActivitiService" ref="activitiService" timeout="10000"/>
 
-    <!-- 餐卷管理 -->
-    <bean id="mealRollService" class="com.boman.upms.rpc.service.impl.MealRollServiceImpl"/>
-    <dubbo:service interface="com.boman.upms.rpc.api.MealRollService" ref="mealRollService" timeout="10000"/>
 </beans>

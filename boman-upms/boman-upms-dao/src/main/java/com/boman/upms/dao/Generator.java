@@ -23,7 +23,7 @@ public class Generator {
     // 需要insert后返回主键的表配置，key:表名,value:主键名
     private static Map<String, String> LAST_INSERT_ID_TABLES = new HashMap<>();
     static {
-        LAST_INSERT_ID_TABLES.put("meal_roll", "id");
+        LAST_INSERT_ID_TABLES.put("cj_meal_roll", "id");
     }
     /**
      * 自动代码生成

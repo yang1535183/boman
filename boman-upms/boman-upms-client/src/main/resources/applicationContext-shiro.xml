@@ -26,6 +26,7 @@
                 /service/** = upmsSessionForceLogout,authc
                 /model/** = upmsSessionForceLogout,authc
                 /oa/** = upmsSessionForceLogout,authc
+                /cj/** = upmsSessionForceLogout,authc
                 /zhaoshang/** = upmsSessionForceLogout,authc
                 /wechat/zhaoshang/oauth = anon
                 /wechat/** = upmsSessionForceLogout,authc

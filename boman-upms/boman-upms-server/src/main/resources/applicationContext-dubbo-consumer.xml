@@ -44,6 +44,4 @@
     <!--工作流接口-->
     <dubbo:reference id="activitiService" interface="com.boman.upms.rpc.api.ActivitiService" />
 
-    <!-- 餐卷管理 -->
-    <dubbo:reference id="mealRollService" interface="com.boman.upms.rpc.api.MealRollService" mock="true"/>
 </beans>
